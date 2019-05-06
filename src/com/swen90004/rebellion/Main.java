@@ -1,4 +1,4 @@
-package com.swen90004;
+package com.swen90004.rebellion;
 
 public class Main {
 
