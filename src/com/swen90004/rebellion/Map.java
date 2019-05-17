@@ -10,7 +10,7 @@ public class Map {
 
     }
 
-    public Map getNeighbourhood(int x, int y, int vision) {
+    public Map getNeighbourhood(Position position, int vision) {
         return new Map();
     }
 
@@ -20,5 +20,9 @@ public class Map {
 
     public List<Citizen> getActiveCitizens() {
         return new ArrayList<Citizen>();
+    }
+
+    public List<Cop> getCops() {
+        return new ArrayList<Cop>();
     }
 }

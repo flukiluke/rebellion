@@ -5,7 +5,11 @@ public class Configuration {
 
     }
 
-    public static String getConfigurationValue(String key) {
-        return "";
+    public static double getDouble(String key) {
+        return 0.5;
+    }
+
+    public static int getInt(String key) {
+        return 5;
     }
 }
