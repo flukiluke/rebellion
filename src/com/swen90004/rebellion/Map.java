@@ -80,9 +80,21 @@ public class Map {
 
     }
 
+    public List<Citizen> getCitizensInVision(Position position,int vision){
+        Map map = this.getNeighbourhood(position,vision);
+        List<Citizen> citizens = new  ArrayList();
+        for(Interactable interactable: map.map){
+            if(interactable instanceof Citizen){
+                citizens.append(interactable);
+            }
+        }
+        return citizens;
+    }
+
+
     public List<Citizen> getActiveCitizens() {
         List<Citizen> activeCitizens = new  ArrayList();
-        for(Interactable interactable: map){
+        for(Interactable interactable: this.map){
             if(interactable instanceof Citizen && ((Citizen) interactable).isRebelling()){
                activeCitizens.append(interactable);
             }
@@ -92,7 +104,7 @@ public class Map {
 
     public List<Cop> getCops() {
         List<Cop> cops = new  ArrayList();
-        for(Interactable interactable: map){
+        for(Interactable interactable: this.map){
             if(interactable instanceof Cop){
                 cops.append(interactable);
             }
