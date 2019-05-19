@@ -15,8 +15,9 @@ public class Citizen implements Interactable {
     private boolean active = false;
 
 
-    public Citizen(Map map) {
+    public Citizen(Map map, Position position) {
         this.map = map;
+        this.position = position;
         perceivedHardship = Math.random();
         riskAversion = Math.random();
     }

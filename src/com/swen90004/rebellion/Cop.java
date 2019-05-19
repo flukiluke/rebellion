@@ -4,8 +4,9 @@ public class Cop implements Interactable {
     private Position position;
     private final Map map;
 
-    public Cop(Map map) {
+    public Cop(Map map, Position position) {
         this.map = map;
+        this.position = position;
     }
 
     @Override
