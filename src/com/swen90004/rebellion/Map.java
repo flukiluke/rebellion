@@ -62,7 +62,7 @@ public class Map {
     public Position getEmptyPosition() {
         List<Position> candidates = new ArrayList<>();
         for (Position position : positions) {
-            if (!isPositionOccupied(position)) {
+            if (isPositionEmpty(position)) {
                 candidates.add(position);
             }
         }
@@ -73,7 +73,7 @@ public class Map {
         return candidates.get(0);
     }
 
-    public boolean isPositionOccupied(Position position) {
+    public boolean isPositionEmpty(Position position) {
         for (Interactable interactable : interactables) {
             if (position.equals(interactable.getPosition()) && interactable.isPresent()) {
                 return false;

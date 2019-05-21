@@ -1,7 +1,7 @@
 package com.swen90004.rebellion;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
@@ -12,9 +12,11 @@ public class Configuration {
     public static void loadConfiguration() {
         try {
             InputStream inputStream = new FileInputStream(CONFIG_FILE);
+            properties.load(inputStream);
+            inputStream.close();
         }
-        catch (FileNotFoundException e) {
-            throw new Error(CONFIG_FILE + " not found");
+        catch (IOException e) {
+            throw new Error(CONFIG_FILE + " not found or read error");
         }
     }
 
