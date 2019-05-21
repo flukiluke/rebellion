@@ -29,8 +29,9 @@ public class Citizen implements Interactable {
 
     @Override
     public void move() {
-        if (isInJail())
+        if (isInJail() || !Configuration.getBoolean("movement")) {
             return;
+        }
         Position newPosition = map
                 .getNeighbourhood(position, vision)
                 .getEmptyPosition();
@@ -44,7 +45,13 @@ public class Citizen implements Interactable {
             turnsInJail--;
     }
 
+    @Override
+    public boolean isPresent() {
+        return !isInJail();
+    }
+
     public boolean isInJail() {
+        active = false;
         return turnsInJail > 0;
     }
 

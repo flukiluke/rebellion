@@ -8,4 +8,8 @@ public class Position {
         this.x = x;
         this.y = y;
     }
+
+    public double distanceTo(Position other) {
+        return Math.hypot(other.x - x, other.y - y);
+    }
 }

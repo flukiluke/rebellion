@@ -1,5 +1,6 @@
 package com.swen90004.rebellion;
 
+import java.util.Collections;
 import java.util.List;
 
 public class Cop implements Interactable {
@@ -33,13 +34,19 @@ public class Cop implements Interactable {
 
     }
 
+    @Override
+    public boolean isPresent() {
+        return true;
+    }
+
     public void enforce() {
-        List<Citizen> citizens = map.getCitizensInVision(position, vision);
+        List<Citizen> citizens = map.getNeighbourhood(position, vision).getActiveCitizens();
         if (citizens.size() == 0) {
             return;
         }
 
-        int maxJailTerm = Configuration.getInt("max-jail-term");
-        citizens.get((int)(Math.random() * citizens.size())).jail((int)(Math.random() * (maxJailTerm + 1)));
+        int maxJailTerm = Configuration.getInt("maxJailTerm");
+        Collections.shuffle(citizens);
+        citizens.get(0).jail(Simulation.random.nextInt(maxJailTerm));
     }
 }

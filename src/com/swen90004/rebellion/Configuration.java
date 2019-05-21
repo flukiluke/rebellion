@@ -12,4 +12,8 @@ public class Configuration {
     public static int getInt(String key) {
         return 5;
     }
+
+    public static boolean getBoolean(String key) {
+        return true;
+    }
 }
