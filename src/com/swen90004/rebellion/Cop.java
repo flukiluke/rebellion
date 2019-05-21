@@ -30,11 +30,6 @@ public class Cop implements Interactable {
     }
 
     @Override
-    public void tick() {
-
-    }
-
-    @Override
     public boolean isPresent() {
         return true;
     }

@@ -3,7 +3,6 @@ package com.swen90004.rebellion;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 import java.util.stream.Collectors;
 
 public class Map {
@@ -42,33 +41,12 @@ public class Map {
         Position position;
         while (numOfCops-- > 0) {
             position = getEmptyPosition();
-            
+            interactables.add(new Cop(this, position));
         }
-        /*
-        // iterate through all board positions and randomly pick: a citizen, cop or empty spot
-        for (int x = 0; x < this.size; x++){
-            for (int y = 0; y < this.size; y++) {
-                Position position = new Position(x,y);
-                while(true) {
-                    int choice = random.nextInt(3);
-                    if(choice == 0 && numOfCops > 0){
-                        this.interactables.add(new Cop(this,position));
-                        numOfCops--;
-                        break;
-                    }
-                    else if(choice == 1 && numOfCitizens > 0){
-                        this.interactables.add(new Citizen(this,position));
-                        numOfCitizens--;
-                        break;
-                    }
-                    else if(choice == 2 && numOfEmpty > 0){
-                        numOfEmpty--;
-                        break;
-                    }
-                }
-            }
+        while (numOfCitizens-- > 0) {
+            position = getEmptyPosition();
+            interactables.add(new Citizen(this, position));
         }
-        */
     }
 
     public Map getNeighbourhood(Position position, int vision) {
@@ -104,14 +82,24 @@ public class Map {
         return true;
     }
 
-    public List<Citizen> getActiveCitizens() {
-        List<Citizen> activeCitizens = new ArrayList<>();
+    public List<Interactable> getInteractables() {
+        return interactables;
+    }
+
+    public List<Citizen> getCitizens() {
+        List<Citizen> citizens = new ArrayList<>();
         for(Interactable interactable : this.interactables) {
-            if(interactable instanceof Citizen && ((Citizen) interactable).isRebelling()){
-                activeCitizens.add((Citizen) interactable);
+            if(interactable instanceof Citizen){
+                citizens.add((Citizen) interactable);
             }
         }
-        return activeCitizens;
+        return citizens;
+    }
+
+    public List<Citizen> getActiveCitizens() {
+        return getCitizens().stream()
+                .filter(Citizen::isRebelling)
+                .collect(Collectors.toList());
     }
 
     public List<Cop> getCops() {
@@ -123,4 +111,5 @@ public class Map {
         }
         return cops;
     }
+
 }

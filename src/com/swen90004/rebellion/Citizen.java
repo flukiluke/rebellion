@@ -39,8 +39,7 @@ public class Citizen implements Interactable {
             position = newPosition;
     }
 
-    @Override
-    public void tick() {
+    public void jailTurn() {
         if (turnsInJail > 0)
             turnsInJail--;
     }
@@ -51,7 +50,6 @@ public class Citizen implements Interactable {
     }
 
     public boolean isInJail() {
-        active = false;
         return turnsInJail > 0;
     }
 
@@ -81,5 +79,6 @@ public class Citizen implements Interactable {
 
     public void jail(int turns) {
         turnsInJail = turns;
+        active = false;
     }
 }
