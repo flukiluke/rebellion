@@ -43,5 +43,6 @@ public class Cop implements Interactable {
         int maxJailTerm = Configuration.getInt("maxJailTerm");
         Collections.shuffle(citizens);
         citizens.get(0).jail(Simulation.random.nextInt(maxJailTerm));
+        position = citizens.get(0).getPosition();
     }
 }

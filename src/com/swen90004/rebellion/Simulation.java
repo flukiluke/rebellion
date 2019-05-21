@@ -10,7 +10,7 @@ public class Simulation {
         Configuration.loadConfiguration();
 	    Map map = new Map(Configuration.getInt("boardSize"));
 	    map.initialiseBoard();
-	    while (true) {
+	    for (int i = 0; i < 3; i++) {
             // Movement rule
             map.getInteractables().forEach(Interactable::move);
 
@@ -29,7 +29,7 @@ public class Simulation {
 
     private static void outputValues(Map map) {
         List<Citizen> citizens = map.getCitizens();
-        long quiet = citizens.stream().filter(c -> !c.isRebelling()).count();
+        long quiet = citizens.stream().filter(c -> !c.isRebelling() && c.isPresent()).count();
         long active = citizens.stream().filter(Citizen::isRebelling).count();
         long jailed = citizens.stream().filter(Citizen::isInJail).count();
         System.out.format("%d %d %d\n", quiet, active, jailed);
