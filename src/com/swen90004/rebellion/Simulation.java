@@ -10,7 +10,9 @@ public class Simulation {
         Configuration.loadConfiguration();
 	    Map map = new Map(Configuration.getInt("boardSize"));
 	    map.initialiseBoard();
-	    for (int i = 0; i < 3; i++) {
+	    for (int i = 0; i < Configuration.getInt("iterations"); i++) {
+            outputValues(map);
+
             // Movement rule
             map.getInteractables().forEach(Interactable::move);
 
@@ -22,9 +24,8 @@ public class Simulation {
 
             // Decrease jail times
             map.getCitizens().forEach(Citizen::jailTurn);
-
-            outputValues(map);
         }
+	    outputValues(map);
     }
 
     private static void outputValues(Map map) {

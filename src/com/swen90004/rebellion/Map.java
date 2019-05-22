@@ -1,27 +1,23 @@
 package com.swen90004.rebellion;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Map {
-    private List<Interactable> interactables = new ArrayList<>();
-    private List<Position> positions = new ArrayList<>();
+    private HashMap<Position, List<Interactable>> mapData = new HashMap<>();
     private int size;
 
     public Map(int size) {
         this.size = size;
         for (int x = 0; x < size; x++) {
             for (int y = 0; y < size; y++) {
-                positions.add(new Position(x, y));
+                mapData.put(new Position(x, y), new ArrayList<>());
             }
         }
     }
 
-    public Map(List<Interactable> interactables, List<Position> positions) {
-        this.interactables = interactables;
-        this.positions = positions;
+    public Map(HashMap<Position, List<Interactable>> mapData) {
+        this.mapData = mapData;
     }
 
     public void initialiseBoard() {
@@ -29,7 +25,7 @@ public class Map {
         int initialCitizenDensity = Configuration.getInt("initialCitizenDensity");
 
         // If the sum of the initialCopDensity and initialCitizenDensity is greater
-        // then 100% then we cannot place all the interactables on the map
+        // then 100% then we cannot place all the mapData on the map
         if( initialCopDensity + initialCitizenDensity > 100 ){
             throw new java.lang.Error("Error: initialCopDensity + initialCitizenDensity must be less than 100");
         }
@@ -41,56 +37,69 @@ public class Map {
         Position position;
         while (numOfCops-- > 0) {
             position = getEmptyPosition();
-            interactables.add(new Cop(this, position));
+            Cop cop = new Cop(this, position);
+            mapData.get(position).add(cop);
         }
         while (numOfCitizens-- > 0) {
             position = getEmptyPosition();
-            interactables.add(new Citizen(this, position));
+            Citizen citizen = new Citizen(this, position);
+            mapData.get(position).add(citizen);
         }
     }
 
     public Map getNeighbourhood(Position position, int vision) {
-        List<Position> positions = this.positions.stream()
-                .filter(p -> position.distanceTo(p) <= vision)
-                .collect(Collectors.toList());
-        List<Interactable> interactables = this.interactables.stream()
-                .filter(i -> position.distanceTo(i.getPosition()) <= vision)
-                .collect(Collectors.toList());
-        return new Map(interactables, positions);
+        HashMap<Position, List<Interactable>> subset = new HashMap<>();
+        for (Position p : mapData.keySet()) {
+            if (position.distanceTo(p) <= vision) {
+                subset.put(p, mapData.get(p));
+            }
+        }
+        return new Map(subset);
     }
 
     public Position getEmptyPosition() {
         List<Position> candidates = new ArrayList<>();
-        for (Position position : positions) {
-            if (isPositionEmpty(position)) {
-                candidates.add(position);
+        for (Position p : mapData.keySet()) {
+            if (isPositionEmpty(p)) {
+                candidates.add(p);
             }
         }
         if (candidates.size() == 0) {
             return null;
         }
-        Collections.shuffle(candidates);
-        return candidates.get(0);
+        return candidates.get(Simulation.random.nextInt(candidates.size()));
     }
 
     public boolean isPositionEmpty(Position position) {
-        for (Interactable interactable : interactables) {
-            if (position.equals(interactable.getPosition()) && interactable.isPresent()) {
-                return false;
-            }
+        List<Interactable> interactableList = mapData.get(position);
+        if (interactableList.size() == 0 ||
+                interactableList.stream().filter(Interactable::isPresent).count() == 0) {
+            return true;
         }
-        return true;
+        return false;
     }
 
     public List<Interactable> getInteractables() {
-        return interactables;
+        List<Interactable> interactableList = new ArrayList<>();
+        for (Position position : mapData.keySet()) {
+            if(!isPositionEmpty(position)) {
+                for (Interactable interactable : mapData.get(position)) {
+                    interactableList.add(interactable);
+                }
+            }
+        }
+        return interactableList;
     }
 
     public List<Citizen> getCitizens() {
         List<Citizen> citizens = new ArrayList<>();
-        for(Interactable interactable : this.interactables) {
-            if(interactable instanceof Citizen){
-                citizens.add((Citizen) interactable);
+        for (Position position : mapData.keySet()) {
+            if(mapData.get(position).size() > 0) {
+                for (Interactable interactable : mapData.get(position)) {
+                    if(interactable instanceof Citizen){
+                        citizens.add((Citizen) interactable);
+                    }
+                }
             }
         }
         return citizens;
@@ -104,12 +113,20 @@ public class Map {
 
     public List<Cop> getCops() {
         List<Cop> cops = new ArrayList<>();
-        for(Interactable interactable : this.interactables) {
-            if(interactable instanceof Cop){
-                cops.add((Cop) interactable);
+        for (Position position : mapData.keySet()) {
+            if(!isPositionEmpty(position)) {
+                for (Interactable interactable : mapData.get(position)) {
+                    if(interactable instanceof Cop){
+                        cops.add((Cop) interactable);
+                    }
+                }
             }
         }
         return cops;
     }
 
+    public void moveInteractable(Interactable interactable, Position position, Position newPosition) {
+        mapData.get(position).remove(interactable);
+        mapData.get(newPosition).add(interactable);
+    }
 }

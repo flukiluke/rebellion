@@ -35,8 +35,10 @@ public class Citizen implements Interactable {
         Position newPosition = map
                 .getNeighbourhood(position, vision)
                 .getEmptyPosition();
-        if (newPosition != null)
+        if (newPosition != null) {
+            map.moveInteractable(this, position, newPosition);
             position = newPosition;
+        }
     }
 
     public void jailTurn() {
