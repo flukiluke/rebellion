@@ -49,9 +49,15 @@ public class Map {
 
     public Map getNeighbourhood(Position position, int vision) {
         HashMap<Position, List<Interactable>> subset = new HashMap<>();
-        for (Position p : mapData.keySet()) {
-            if (position.distanceTo(p) <= vision) {
-                subset.put(p, mapData.get(p));
+        for (int x = position.x - vision; x <= position.x + vision; x++) {
+            for (int y = position.y - vision; y <= position.y + vision; y++) {
+                if (Math.hypot(position.x - x, position.y - y) <= vision) {
+                    Position p = new Position(x, y);
+                    List<Interactable> cell = mapData.get(p);
+                    if (cell == null)
+                        continue;
+                    subset.put(p, cell);
+                }
             }
         }
         return new Map(subset);
