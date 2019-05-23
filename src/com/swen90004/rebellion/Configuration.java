@@ -7,7 +7,7 @@ import java.util.Properties;
 
 public class Configuration {
     private static final String CONFIG_FILE = "config.properties";
-    private static Properties properties = new Properties();
+    static Properties properties = new Properties();
 
     public static void loadConfiguration() {
         try {
