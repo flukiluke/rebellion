@@ -49,10 +49,13 @@ public class Map {
 
     public Map getNeighbourhood(Position position, int vision) {
         HashMap<Position, List<Interactable>> subset = new HashMap<>();
+        int xWrapped, yWrapped;
         for (int x = position.x - vision; x <= position.x + vision; x++) {
             for (int y = position.y - vision; y <= position.y + vision; y++) {
-                if (Math.hypot(position.x - x, position.y - y) <= vision) {
-                    Position p = new Position(x, y);
+                xWrapped = (x + size) % size;
+                yWrapped = (y + size) % size;
+                if (Math.hypot(position.x - x, position.y - y) < vision) {
+                    Position p = new Position(xWrapped, yWrapped);
                     List<Interactable> cell = mapData.get(p);
                     if (cell == null)
                         continue;
@@ -114,6 +117,7 @@ public class Map {
     public List<Citizen> getActiveCitizens() {
         return getCitizens().stream()
                 .filter(Citizen::isRebelling)
+                .filter(Citizen::isPresent)
                 .collect(Collectors.toList());
     }
 
