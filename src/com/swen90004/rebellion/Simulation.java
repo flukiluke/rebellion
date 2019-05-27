@@ -3,9 +3,30 @@ package com.swen90004.rebellion;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * Simulation Class
+ *
+ * It is responsible for:
+ *  - Instantiating the Map
+ *  - Applying the update rules
+ *  - Logging the output
+ *
+ * @author Luke Ceddia [834076]
+ * @author Nir Palombo [863972]
+ * @author Eric Sciberras [761250]
+ *
+ */
+
+
 public class Simulation {
     public static Random random = new Random();
 
+    /**
+     *  Creates Map then iterates through applying the update rules and printing to terminal
+     *
+     * @param args - values to override the defaults in config.properties.
+     *             Format: --property_name=property_value
+     */
     public static void main(String[] args) {
         Configuration.loadConfiguration();
         Configuration.parseCmdLineArgs(args);

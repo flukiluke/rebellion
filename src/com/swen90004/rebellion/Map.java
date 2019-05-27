@@ -3,6 +3,21 @@ package com.swen90004.rebellion;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * Map Class
+ *
+ * It is responsible for:
+ *  - Initialising the 'board'
+ *  - Storing all the interactable objects along with their positions
+ *  - help interactables 'see' what is in their neighbourhood
+ *  - providing interactable objects to Simulation class for updating and output
+ *
+ * @author Luke Ceddia [834076]
+ * @author Nir Palombo [863972]
+ * @author Eric Sciberras [761250]
+ *
+ */
+
 public class Map {
     private HashMap<Position, List<Interactable>> mapData = new HashMap<>();
     private int size;
@@ -20,6 +35,10 @@ public class Map {
         this.mapData = mapData;
     }
 
+    /**
+     * Populates the board with Citizens and Cops according to the parameters
+     * initialCopDensity and initialCitizenDensity
+     */
     public void initialiseBoard() {
         int initialCopDensity = Configuration.getInt("initialCopDensity");
         int initialCitizenDensity = Configuration.getInt("initialCitizenDensity");
@@ -47,7 +66,16 @@ public class Map {
         }
     }
 
+    /**
+     * Returns a subset of the Map representing only what the interactable can see.
+     *
+     * @param position - The position of the interactable calling the method
+     * @param vision - The radius the interactable can 'see'
+     * @return Map - A map consisting of only what the interactable can see
+     */
     public Map getNeighbourhood(Position position, int vision) {
+        // Iterates through the Interactables 'Field of vision' and appends
+        // Interactables into a new Map
         HashMap<Position, List<Interactable>> subset = new HashMap<>();
         int xWrapped, yWrapped;
         for (int x = position.x - vision; x <= position.x + vision; x++) {
@@ -66,6 +94,11 @@ public class Map {
         return new Map(subset);
     }
 
+    /**
+     * Iterates through Mapdata to find empty positions and randomly returns one.
+     *
+     * @return position - An empty position.
+     */
     public Position getEmptyPosition() {
         List<Position> candidates = new ArrayList<>();
         for (Position p : mapData.keySet()) {
@@ -79,6 +112,13 @@ public class Map {
         return candidates.get(Simulation.random.nextInt(candidates.size()));
     }
 
+    /**
+     * Checks if a given position contains a "present" interactable.
+     * By "present" we mean any Interactable that isn't in jail.
+     *
+     * @param position
+     * @return boolean
+     */
     public boolean isPositionEmpty(Position position) {
         List<Interactable> interactableList = mapData.get(position);
         if (interactableList.size() == 0 ||
@@ -88,6 +128,9 @@ public class Map {
         return false;
     }
 
+    /**
+     * @return list of interactables within mapData
+     */
     public List<Interactable> getInteractables() {
         List<Interactable> interactableList = new ArrayList<>();
         for (Position position : mapData.keySet()) {
@@ -100,6 +143,9 @@ public class Map {
         return interactableList;
     }
 
+    /**
+     * @return list of citizens within mapData
+     */
     public List<Citizen> getCitizens() {
         List<Citizen> citizens = new ArrayList<>();
         for (Position position : mapData.keySet()) {
@@ -114,6 +160,9 @@ public class Map {
         return citizens;
     }
 
+    /**
+     * @return list of active (rebelling) citizens within mapData
+     */
     public List<Citizen> getActiveCitizens() {
         return getCitizens().stream()
                 .filter(Citizen::isRebelling)
@@ -121,6 +170,9 @@ public class Map {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * @return list of cops within mapData
+     */
     public List<Cop> getCops() {
         List<Cop> cops = new ArrayList<>();
         for (Position position : mapData.keySet()) {
@@ -135,6 +187,13 @@ public class Map {
         return cops;
     }
 
+    /**
+     * Used to update an interactables position on the Map
+     *
+     * @param interactable - The interactable to move
+     * @param position - Current position
+     * @param newPosition - Position to move to
+     */
     public void moveInteractable(Interactable interactable, Position position, Position newPosition) {
         mapData.get(position).remove(interactable);
         mapData.get(newPosition).add(interactable);

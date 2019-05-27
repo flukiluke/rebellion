@@ -2,6 +2,18 @@ package com.swen90004.rebellion;
 
 import java.util.Objects;
 
+/**
+ * Position Class
+ *
+ * It is responsible for:
+ *  - Holding X and Y coordinates of interactable objects
+ *
+ * @author Luke Ceddia [834076]
+ * @author Nir Palombo [863972]
+ * @author Eric Sciberras [761250]
+ *
+ */
+
 public class Position {
     public final int x;
     public final int y;
@@ -11,6 +23,12 @@ public class Position {
         this.y = y;
     }
 
+    /**
+     * Compares object to this Position for equality
+     *
+     * @param o - an object (can be either a Position object or Null)
+     * @return boolean - the indicate if object is equal to this Position
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

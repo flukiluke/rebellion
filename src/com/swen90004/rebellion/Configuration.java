@@ -8,10 +8,27 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Configuration Class
+ *
+ * It is responsible for:
+ *  - Loading Default Simulation parameters from config.properties
+ *  - Overriding Default Simulation parameters from Command Line
+ *  - Allowing other classes to retrieve parameters
+ *
+ * @author Luke Ceddia [834076]
+ * @author Nir Palombo [863972]
+ * @author Eric Sciberras [761250]
+ *
+ */
+
 public class Configuration {
     private static final String CONFIG_FILE = "config.properties";
     private static Properties properties = new Properties();
 
+    /**
+     * Loads the parameters from config.properties
+     */
     public static void loadConfiguration() {
         try {
             InputStream inputStream = new FileInputStream(CONFIG_FILE);
@@ -23,6 +40,12 @@ public class Configuration {
         }
     }
 
+    /**
+     * Returns the requested parameter casted as a double
+     *
+     * @param key - The name of the parameter being requested
+     * @return double
+     */
     public static double getDouble(String key) {
         String raw = properties.getProperty(key);
         if (raw == null) {
@@ -31,6 +54,12 @@ public class Configuration {
         return Double.parseDouble(raw);
     }
 
+    /**
+     * Returns the requested parameter casted as an int
+     *
+     * @param key - The name of the parameter being requested
+     * @return int
+     */
     public static int getInt(String key) {
         String raw = properties.getProperty(key);
         if (raw == null) {
@@ -38,6 +67,12 @@ public class Configuration {
         }
         return Integer.parseInt(raw);    }
 
+    /**
+     * Returns the requested parameter casted as a boolean
+     *
+     * @param key - The name of the parameter being requested
+     * @return boolean
+     */
     public static boolean getBoolean(String key) {
         String raw = properties.getProperty(key);
         if (raw == null) {
