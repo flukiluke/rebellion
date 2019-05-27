@@ -9,7 +9,7 @@ public class Citizen implements Interactable {
     private final double riskAversion;
 
     // How many square the citizen can see
-    private final int vision = Configuration.getInt("vision");
+    private int vision = Configuration.getInt("vision");
 
     private int turnsInJail = 0;
     private boolean active = false;
@@ -82,5 +82,9 @@ public class Citizen implements Interactable {
     public void jail(int turns) {
         turnsInJail = turns;
         active = false;
+    }
+
+    public void updateVision(int vision) {
+        this.vision = vision;
     }
 }

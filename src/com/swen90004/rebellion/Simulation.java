@@ -13,8 +13,6 @@ public class Simulation {
 	    Map map = new Map(Configuration.getInt("boardSize"));
 	    map.initialiseBoard();
 	    for (int i = 0; i < Configuration.getInt("iterations"); i++) {
-            outputValues(map);
-
             // Movement rule
             map.getInteractables().forEach(Interactable::move);
 
@@ -24,19 +22,28 @@ public class Simulation {
             // Arrest rule
             map.getCops().forEach(Cop::enforce);
 
+            List<Citizen> citizens = map.getCitizens();
             // Decrease jail times
-            map.getCitizens().forEach(Citizen::jailTurn);
-        }
-	    outputValues(map);
+            citizens.forEach(Citizen::jailTurn);
+
+            // Generate stats
+            long quiet = citizens.stream().filter(c -> !c.isRebelling() && c.isPresent()).count();
+            long active = citizens.stream().filter(Citizen::isRebelling).count();
+            long jailed = citizens.stream().filter(Citizen::isInJail).count();
+            int visibility;
+            if (!Configuration.getBoolean("censorship")) {
+                visibility = Configuration.getInt("vision");
+            }
+            else {
+                visibility = Math.max(0, (int) (Configuration.getInt("vision") -
+                        Math.exp((active) / 20)));
+            }
+
+            // Update visibilities if needed
+            if (Configuration.getBoolean("censorship")) {
+                map.getCitizens().forEach(c -> c.updateVision(visibility));
+            }
+            System.out.format("%d %d %d %d\n", quiet, active, jailed, visibility);
+	    }
     }
-
-    private static void outputValues(Map map) {
-        List<Citizen> citizens = map.getCitizens();
-        long quiet = citizens.stream().filter(c -> !c.isRebelling() && c.isPresent()).count();
-        long active = citizens.stream().filter(Citizen::isRebelling).count();
-        long jailed = citizens.stream().filter(Citizen::isInJail).count();
-        System.out.format("%d %d %d\n", quiet, active, jailed);
-    }
-
-
 }
