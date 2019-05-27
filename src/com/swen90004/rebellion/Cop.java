@@ -21,6 +21,11 @@ public class Cop implements Interactable {
     // The radius that the cop can see
     private final int vision = Configuration.getInt("vision");
 
+    /**
+     * Create a cop at a given position
+     * @param map Map to place cop on
+     * @param position Position to place cop at
+     */
     public Cop(Map map, Position position) {
         this.map = map;
         this.position = position;

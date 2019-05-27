@@ -22,7 +22,13 @@ public class Simulation {
     public static Random random = new Random();
 
     /**
-     *  Creates Map then iterates through applying the update rules and printing to terminal
+     *  Creates Map then iterates through applying the update rules and printing to terminal.
+     *
+     *  Output format is 4 columns of numbers:
+     *   - Quiet citizens
+     *   - Active (rebelling) citizens
+     *   - Jailed citizens
+     *   - Citizens' vision (part of the censorship extension)
      *
      * @param args - values to override the defaults in config.properties.
      *             Format: --property_name=property_value
@@ -44,6 +50,7 @@ public class Simulation {
             map.getCops().forEach(Cop::enforce);
 
             List<Citizen> citizens = map.getCitizens();
+
             // Decrease jail times
             citizens.forEach(Citizen::jailTurn);
 

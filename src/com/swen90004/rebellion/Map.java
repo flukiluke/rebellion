@@ -19,9 +19,17 @@ import java.util.stream.Collectors;
  */
 
 public class Map {
+    // Store a list of interactables at each position because a recently released
+    // prisoner could result in there being two interactables at the same position.
     private HashMap<Position, List<Interactable>> mapData = new HashMap<>();
+
+    // Edge length of the map
     private int size;
 
+    /**
+     * Construct a square map of the given size
+     * @param size
+     */
     public Map(int size) {
         this.size = size;
         for (int x = 0; x < size; x++) {
@@ -31,6 +39,10 @@ public class Map {
         }
     }
 
+    /**
+     * Construct a map subset, linked to the original map so updating one updates the other
+     * @param mapData
+     */
     public Map(HashMap<Position, List<Interactable>> mapData) {
         this.mapData = mapData;
     }
@@ -78,10 +90,13 @@ public class Map {
         // Interactables into a new Map
         HashMap<Position, List<Interactable>> subset = new HashMap<>();
         int xWrapped, yWrapped;
+        // First consider a square around the interactable
         for (int x = position.x - vision; x <= position.x + vision; x++) {
             for (int y = position.y - vision; y <= position.y + vision; y++) {
+                // Allow for wrapping behaviour of NetLogo
                 xWrapped = (x + size) % size;
                 yWrapped = (y + size) % size;
+                // Refine to a circular area around the interactable
                 if (Math.hypot(position.x - x, position.y - y) < vision) {
                     Position p = new Position(xWrapped, yWrapped);
                     List<Interactable> cell = mapData.get(p);

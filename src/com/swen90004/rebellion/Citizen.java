@@ -17,16 +17,24 @@ public class Citizen implements Interactable {
     private final Map map;
 
     // Random values in the range [0,1)
+    // See report for explanation of these values
     private final double perceivedHardship;
     private final double riskAversion;
 
-    // How many square the citizen can see
+    // How many squares radius the citizen can see
     private int vision = Configuration.getInt("vision");
 
+    // If > 0 we are in jail and is a count of how many turn we have left
     private int turnsInJail = 0;
+
+    // Are we rebelling?
     private boolean active = false;
 
-
+    /**
+     * Create a citizen at a given position
+     * @param map Map to place citizen on
+     * @param position Position to place citizen at
+     */
     public Citizen(Map map, Position position) {
         this.map = map;
         this.position = position;
@@ -37,7 +45,7 @@ public class Citizen implements Interactable {
     /**
      * Gets citizen's Position
      *
-     * @return Position - the objects Position
+     * @return Position - the object's Position
      */
     @Override
     public Position getPosition() {
@@ -70,7 +78,7 @@ public class Citizen implements Interactable {
     /**
      * Controls Jail behaviour
      *
-     * After every tick a jailed citizen's turns in jail will decrease by one.s
+     * After every tick a jailed citizen's turns in jail will decrease by one.
      */
     public void jailTurn() {
         if (turnsInJail > 0)
