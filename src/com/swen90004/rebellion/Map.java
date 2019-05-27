@@ -58,7 +58,7 @@ public class Map {
         // If the sum of the initialCopDensity and initialCitizenDensity is greater
         // then 100% then we cannot place all the mapData on the map
         if( initialCopDensity + initialCitizenDensity > 100 ){
-            throw new java.lang.Error("Error: initialCopDensity + initialCitizenDensity must be less than 100");
+            throw new java.lang.Error("Error: sum of densities must be < 100");
         }
 
         // convert densities to number of citizens and cops
@@ -209,7 +209,9 @@ public class Map {
      * @param position - Current position
      * @param newPosition - Position to move to
      */
-    public void moveInteractable(Interactable interactable, Position position, Position newPosition) {
+    public void moveInteractable(Interactable interactable,
+                                 Position position,
+                                 Position newPosition) {
         mapData.get(position).remove(interactable);
         mapData.get(newPosition).add(interactable);
     }

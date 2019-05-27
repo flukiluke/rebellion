@@ -91,7 +91,8 @@ public class Configuration {
                 System.out.println("Here are the default values of the program:");
                 Set<String> keys = Configuration.properties.stringPropertyNames();
                 for (String key : keys) {
-                    System.out.println("  " + key + " = " + Configuration.properties.getProperty(key));
+                    System.out.println("  " + key + " = " +
+                            Configuration.properties.getProperty(key));
                 }
                 System.out.println("It can be executed with different values for example:");
                 System.out.println("java Simulation --k=2.5 --vision=5");
