@@ -59,10 +59,13 @@ public class Simulation {
             long active = citizens.stream().filter(Citizen::isRebelling).count();
             long jailed = citizens.stream().filter(Citizen::isInJail).count();
             int visibility;
+
+            // Censorship extension to the model
             if (!Configuration.getBoolean("censorship")) {
                 visibility = Configuration.getInt("vision");
             }
             else {
+                // Exponential hits 7 at around 40 active citizens
                 visibility = Math.max(0, (int) (Configuration.getInt("vision") -
                         Math.exp((active) / 20)));
             }
@@ -71,7 +74,7 @@ public class Simulation {
             if (Configuration.getBoolean("censorship")) {
                 map.getCitizens().forEach(c -> c.updateVision(visibility));
             }
-            System.out.format("%d %d %d %d\n", quiet, active, jailed, visibility);
+            System.out.format("%d %d %d\n", quiet, active, jailed);
 	    }
     }
 }

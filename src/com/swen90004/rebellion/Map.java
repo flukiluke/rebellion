@@ -52,8 +52,8 @@ public class Map {
      * initialCopDensity and initialCitizenDensity
      */
     public void initialiseBoard() {
-        int initialCopDensity = Configuration.getInt("initialCopDensity");
-        int initialCitizenDensity = Configuration.getInt("initialCitizenDensity");
+        double initialCopDensity = Configuration.getDouble("initialCopDensity");
+        double initialCitizenDensity = Configuration.getDouble("initialCitizenDensity");
 
         // If the sum of the initialCopDensity and initialCitizenDensity is greater
         // then 100% then we cannot place all the mapData on the map
@@ -62,8 +62,8 @@ public class Map {
         }
 
         // convert densities to number of citizens and cops
-        int numOfCops = Math.round(initialCopDensity/100f * size * size) ;
-        int numOfCitizens = Math.round(initialCitizenDensity/100f * size * size);
+        long numOfCops = Math.round(initialCopDensity/100f * size * size) ;
+        long numOfCitizens = Math.round(initialCitizenDensity/100f * size * size);
 
         Position position;
         while (numOfCops-- > 0) {
