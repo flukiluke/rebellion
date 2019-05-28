@@ -38,6 +38,13 @@ public class Position {
                 y == position.y;
     }
 
+    /**
+     * Since position is the key of the hashmap and we are overriding
+     * equals(), we should also override the default hashCode() function
+     * to ensure correct behaviour.
+     *
+     * @return int - a hash
+     */
     @Override
     public int hashCode() {
         return Objects.hash(x, y);
